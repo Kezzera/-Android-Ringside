@@ -1,21 +1,47 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Ringside Interval Timer
 
-# Run and deploy your AI Studio app
+Ringside is a high-performance, offline-first boxing and combat sports interval timer built for Android. Explicitly designed with latency-free execution and high-visibility interfaces in mind, Ringside thrives in rigorous training environments—from your local gym to completely disconnected setups in the Arctic.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/0e3cd3b3-99f9-4035-9f62-c7f4404b8825
+- **Extreme Offline Reliability**: Built with Room Database. Ringside requires absolutely zero internet connection for its core features. It works wherever you are.
+- **Precision Timing Engine**: Uses high-precision Coroutine-based timing bound to hardware clocks (`System.nanoTime()`) for zero-drift interval progression, accurate down to the millisecond.
+- **Combat Sports Profiles**: Comes pre-loaded with configurations for:
+  - Classic Boxing
+  - Mixed Martial Arts (MMA)
+  - Brazilian Jiu-Jitsu (BJJ)
+  - Collegiate Wrestling
+  - High-Intensity Interval Training (HIIT)
+- **Material 3 Expressive Design**: Huge, tabular typography, high-contrast colors, and dynamic circular progress mapping designed to be easily readable through sweat from across the room.
+- **Haptic & Audio Feedback**: Low-latency `ToneGenerator` audio signals and precise `Vibrator` patterns ensure you know exactly when a round starts, when the rest ends, and when your warning period hits. 
 
-## Run Locally
+## Architectural Overview
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+Ringside follows Clean Architecture principles focused on a lightweight and deterministic state machine:
 
+- **UI Layer (Jetpack Compose)**: `TimerScreen` operates entirely on unidirectional data flow powered by StateFlows. Extensively uses custom `Canvas` drawing for a highly performant circular progress indicator instead of heavy nested layouts.
+- **Presentation Layer (ViewModel)**: `TimerViewModel` acts as the state machine bounding the execution cycle (Prep -> Work -> Rest -> Finished). Updates run decoupled from the UI thread using Kotlin Couroutines.
+- **Data Layer (Room DB)**: Local SQLite wrapper providing robust persistence of user configurations via `WorkoutProfileDao`. The database is heavily optimized for zero-overhead initializations.
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+## Developer Setup
+
+### Prerequisites
+- Android Studio Ladybug or newer
+- JDK 17+
+- Android SDK 36
+
+### Building from Source
+1. Clone the repository: `git clone https://github.com/your-username/ringside-timer.git`
+2. Open the project in Android Studio.
+3. Gradle sync will execute automatically.
+4. Run the `:app:assembleDebug` task or simply press "Run" to deploy to an emulator or physical device.
+
+## Technologies Used
+- **Kotlin 2.0+**
+- **Jetpack Compose** (Material 3)
+- **Kotlin Coroutines / Flow**
+- **AndroidX Room**
+- **AndroidX Lifecycle & ViewModel**
+
+## License
+MIT License. See `LICENSE` for details.
